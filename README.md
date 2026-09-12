@@ -2,8 +2,7 @@
 
 A small MongoDB-backed web application for managing an artistic campus's events,
 users and registrations — exhibitions, art workshops, vernissages and talks.
-Built as a NoSQL Development Project (MCS DE1, Master 2 - Data Engineering and
-Cloud Computing) — this application replaces the final written exam.
+
 
 ## 1. Purpose
 
