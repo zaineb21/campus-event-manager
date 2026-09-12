@@ -1,0 +1,5 @@
+body { background-color: #f7f8fa; }
+.card-stat { text-align: center; padding: 1.2rem; }
+.card-stat h2 { font-size: 2rem; margin-bottom: 0; }
+.badge-full { background-color: #dc3545; }
+.table-responsive { background: white; border-radius: 8px; }

@@ -1,0 +1,78 @@
+<%- include('../partials/header') %>
+
+<% if (error) { %><div class="alert alert-warning"><%= error %></div><% } %>
+
+<div class="d-flex justify-content-between align-items-start">
+  <div>
+    <h1><%= event.title %></h1>
+    <p class="text-muted"><%= event.category %> &middot;
+      <% event.tags.forEach(function(t) { %><span class="badge bg-secondary me-1"><%= t %></span><% }); %>
+    </p>
+  </div>
+  <a href="/events/<%= event._id %>/edit" class="btn btn-outline-secondary">Edit</a>
+</div>
+
+<p><%= event.description %></p>
+
+<div class="row g-3 mb-4">
+  <div class="col-md-6">
+    <div class="card p-3">
+      <p><strong>Start:</strong> <%= new Date(event.startDate).toLocaleString() %></p>
+      <p><strong>End:</strong> <%= new Date(event.endDate).toLocaleString() %></p>
+      <p><strong>Location:</strong> <%= event.location.building %>, room <%= event.location.room %> (<%= event.location.campus %> campus)</p>
+      <p><strong>Organizer:</strong> <%= organizer ? organizer.firstName + ' ' + organizer.lastName : 'Unknown' %></p>
+    </div>
+  </div>
+  <div class="col-md-6">
+    <div class="card p-3">
+      <p><strong>Capacity:</strong> <%= event.capacity %></p>
+      <p><strong>Confirmed registrations:</strong> <%= confirmedCount %></p>
+      <p><strong>Occupancy:</strong> <%= occupancy %>%
+        <% if (confirmedCount >= event.capacity) { %><span class="badge badge-full text-white">FULL</span><% } %>
+      </p>
+    </div>
+  </div>
+</div>
+
+<h4>Register a user</h4>
+<form method="POST" action="/events/<%= event._id %>/register" class="row g-2 mb-4">
+  <div class="col-md-8">
+    <select class="form-select" name="userId" required>
+      <option value="">-- select a user --</option>
+      <% availableUsers.forEach(function(u) { %>
+        <option value="<%= u._id %>"><%= u.firstName %> <%= u.lastName %> (<%= u.email %>)</option>
+      <% }); %>
+    </select>
+  </div>
+  <div class="col-md-4">
+    <button class="btn btn-primary w-100" type="submit">Register</button>
+  </div>
+</form>
+
+<h4>Participants</h4>
+<div class="table-responsive">
+<table class="table">
+  <thead><tr><th>User</th><th>Email</th><th>Status</th><th>Registered at</th><th></th></tr></thead>
+  <tbody>
+  <% participants.forEach(function(p) { %>
+    <tr>
+      <td><%= p.user ? p.user.firstName + ' ' + p.user.lastName : 'Unknown user' %></td>
+      <td><%= p.user ? p.user.email : '' %></td>
+      <td><span class="badge bg-<%= p.status === 'confirmed' ? 'success' : (p.status === 'waiting' ? 'warning' : 'secondary') %>"><%= p.status %></span></td>
+      <td><%= new Date(p.registeredAt).toLocaleString() %></td>
+      <td>
+        <form method="POST" action="/events/<%= event._id %>/unregister" onsubmit="return confirm('Remove this registration?');">
+          <input type="hidden" name="userId" value="<%= p.user ? p.user._id : '' %>">
+          <button class="btn btn-sm btn-outline-danger">Remove</button>
+        </form>
+      </td>
+    </tr>
+  <% }); %>
+  <% if (participants.length === 0) { %>
+    <tr><td colspan="5" class="text-muted text-center">No registrations yet.</td></tr>
+  <% } %>
+  </tbody>
+</table>
+</div>
+
+<%- include('../partials/footer') %>

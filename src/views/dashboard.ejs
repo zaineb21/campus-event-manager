@@ -1,0 +1,71 @@
+<%- include('partials/header') %>
+
+<h1 class="mb-4">Dashboard</h1>
+
+<div class="row g-3 mb-4">
+  <div class="col-md-3">
+    <div class="card card-stat shadow-sm">
+      <h2><%= usersCount %></h2>
+      <div class="text-muted">Users</div>
+    </div>
+  </div>
+  <div class="col-md-3">
+    <div class="card card-stat shadow-sm">
+      <h2><%= eventsCount %></h2>
+      <div class="text-muted">Events</div>
+    </div>
+  </div>
+  <div class="col-md-3">
+    <div class="card card-stat shadow-sm">
+      <h2><%= upcomingCount %></h2>
+      <div class="text-muted">Upcoming Events</div>
+    </div>
+  </div>
+  <div class="col-md-3">
+    <div class="card card-stat shadow-sm">
+      <h2><%= totalRegistrations %></h2>
+      <div class="text-muted">Total Registrations</div>
+    </div>
+  </div>
+</div>
+
+<div class="row g-3">
+  <div class="col-md-7">
+    <div class="card shadow-sm">
+      <div class="card-header">Next 5 Upcoming Events</div>
+      <div class="table-responsive">
+        <table class="table mb-0">
+          <thead><tr><th>Title</th><th>Category</th><th>Start date</th></tr></thead>
+          <tbody>
+          <% nextEvents.forEach(function(e) { %>
+            <tr>
+              <td><a href="/events/<%= e._id %>"><%= e.title %></a></td>
+              <td><%= e.category %></td>
+              <td><%= new Date(e.startDate).toLocaleString() %></td>
+            </tr>
+          <% }); %>
+          <% if (nextEvents.length === 0) { %>
+            <tr><td colspan="3" class="text-muted">No upcoming events.</td></tr>
+          <% } %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-5">
+    <div class="card shadow-sm">
+      <div class="card-header">Most Popular Event (confirmed registrations)</div>
+      <div class="card-body">
+        <% if (mostPopular) { %>
+          <h5><a href="/events/<%= mostPopular._id %>"><%= mostPopular.title %></a></h5>
+          <p class="mb-1"><strong>Category:</strong> <%= mostPopular.category %></p>
+          <p class="mb-0"><strong>Confirmed registrations:</strong> <%= mostPopular.confirmedCount %></p>
+        <% } else { %>
+          <p class="text-muted">No events yet.</p>
+        <% } %>
+      </div>
+    </div>
+  </div>
+</div>
+
+<%- include('partials/footer') %>

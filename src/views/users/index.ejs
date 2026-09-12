@@ -1,0 +1,59 @@
+<%- include('../partials/header') %>
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <h1>Users</h1>
+  <a href="/users/new" class="btn btn-primary">+ New User</a>
+</div>
+
+<% if (query.error) { %><div class="alert alert-warning"><%= query.error %></div><% } %>
+
+<form class="row g-2 mb-4" method="GET" action="/users">
+  <div class="col-md-4">
+    <input type="text" class="form-control" name="q" placeholder="Search by name or email" value="<%= query.q || '' %>">
+  </div>
+  <div class="col-md-3">
+    <select class="form-select" name="department">
+      <option value="">All departments</option>
+      <% departments.forEach(function(d) { %>
+        <option value="<%= d %>" <%= query.department === d ? 'selected' : '' %>><%= d %></option>
+      <% }); %>
+    </select>
+  </div>
+  <div class="col-md-3">
+    <select class="form-select" name="role">
+      <option value="">All roles</option>
+      <% roles.forEach(function(r) { %>
+        <option value="<%= r %>" <%= query.role === r ? 'selected' : '' %>><%= r %></option>
+      <% }); %>
+    </select>
+  </div>
+  <div class="col-md-2">
+    <button class="btn btn-outline-secondary w-100" type="submit">Go</button>
+  </div>
+</form>
+
+<div class="table-responsive">
+<table class="table align-middle">
+  <thead><tr><th>Name</th><th>Email</th><th>Department</th><th>Role</th><th>Interests</th><th>Registrations</th><th></th></tr></thead>
+  <tbody>
+  <% users.forEach(function(u) { %>
+    <tr>
+      <td><a href="/users/<%= u._id %>"><%= u.firstName %> <%= u.lastName %></a></td>
+      <td><%= u.email %></td>
+      <td><%= u.department %></td>
+      <td><%= u.role %></td>
+      <td><%= u.interests.join(', ') %></td>
+      <td><%= u.registrationsCount %></td>
+      <td class="text-end">
+        <a href="/users/<%= u._id %>/edit" class="btn btn-sm btn-outline-secondary">Edit</a>
+        <form action="/users/<%= u._id %>?_method=DELETE" method="POST" class="d-inline" onsubmit="return confirm('Delete this user?');">
+          <button class="btn btn-sm btn-outline-danger">Delete</button>
+        </form>
+      </td>
+    </tr>
+  <% }); %>
+  </tbody>
+</table>
+</div>
+
+<%- include('../partials/footer') %>

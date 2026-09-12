@@ -1,0 +1,43 @@
+<%- include('../partials/header') %>
+
+<h1><%= user && user._id ? 'Edit User' : 'New User' %></h1>
+<% if (error) { %><div class="alert alert-danger"><%= error %></div><% } %>
+
+<form method="POST" action="<%= user && user._id ? '/users/' + user._id + '?_method=PUT' : '/users' %>" class="card p-4 shadow-sm">
+  <div class="row">
+    <div class="col-md-6 mb-3">
+      <label class="form-label">First name</label>
+      <input type="text" class="form-control" name="firstName" required value="<%= user ? user.firstName : '' %>">
+    </div>
+    <div class="col-md-6 mb-3">
+      <label class="form-label">Last name</label>
+      <input type="text" class="form-control" name="lastName" required value="<%= user ? user.lastName : '' %>">
+    </div>
+  </div>
+  <div class="mb-3">
+    <label class="form-label">Email</label>
+    <input type="email" class="form-control" name="email" required value="<%= user ? user.email : '' %>">
+  </div>
+  <div class="row">
+    <div class="col-md-6 mb-3">
+      <label class="form-label">Department</label>
+      <input type="text" class="form-control" name="department" required value="<%= user ? user.department : '' %>">
+    </div>
+    <div class="col-md-6 mb-3">
+      <label class="form-label">Role</label>
+      <select class="form-select" name="role" required>
+        <% ['student','staff','organizer'].forEach(function(r) { %>
+          <option value="<%= r %>" <%= user && user.role === r ? 'selected' : '' %>><%= r %></option>
+        <% }); %>
+      </select>
+    </div>
+  </div>
+  <div class="mb-3">
+    <label class="form-label">Interests (comma-separated)</label>
+    <input type="text" class="form-control" name="interests" value="<%= user && user.interests ? (Array.isArray(user.interests) ? user.interests.join(', ') : user.interests) : '' %>">
+  </div>
+  <button class="btn btn-primary" type="submit">Save</button>
+  <a href="/users" class="btn btn-link">Cancel</a>
+</form>
+
+<%- include('../partials/footer') %>

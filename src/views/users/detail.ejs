@@ -1,0 +1,36 @@
+<%- include('../partials/header') %>
+
+<h1><%= user.firstName %> <%= user.lastName %></h1>
+<p class="text-muted"><%= user.email %> &middot; <%= user.department %> &middot; <%= user.role %></p>
+<p><strong>Interests:</strong> <%= user.interests.join(', ') %></p>
+
+<div class="row g-3 mb-4">
+  <div class="col-md-3">
+    <div class="card card-stat shadow-sm"><h2><%= upcomingCount %></h2><div class="text-muted">Upcoming</div></div>
+  </div>
+  <div class="col-md-3">
+    <div class="card card-stat shadow-sm"><h2><%= pastCount %></h2><div class="text-muted">Past</div></div>
+  </div>
+</div>
+
+<h4>Event registrations</h4>
+<div class="table-responsive">
+<table class="table">
+  <thead><tr><th>Event</th><th>Category</th><th>Start date</th><th>Status</th></tr></thead>
+  <tbody>
+  <% events.forEach(function(e) { %>
+    <tr>
+      <td><a href="/events/<%= e._id %>"><%= e.title %></a></td>
+      <td><%= e.category %></td>
+      <td><%= new Date(e.startDate).toLocaleString() %></td>
+      <td><span class="badge bg-<%= e.registration.status === 'confirmed' ? 'success' : (e.registration.status === 'waiting' ? 'warning' : 'secondary') %>"><%= e.registration.status %></span></td>
+    </tr>
+  <% }); %>
+  <% if (events.length === 0) { %>
+    <tr><td colspan="4" class="text-muted text-center">This user is not registered for any event.</td></tr>
+  <% } %>
+  </tbody>
+</table>
+</div>
+
+<%- include('../partials/footer') %>

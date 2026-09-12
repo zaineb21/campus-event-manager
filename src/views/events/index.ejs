@@ -1,0 +1,83 @@
+<%- include('../partials/header') %>
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <h1>Events</h1>
+  <a href="/events/new" class="btn btn-primary">+ New Event</a>
+</div>
+
+<form class="row g-2 mb-4" method="GET" action="/events">
+  <div class="col-md-3">
+    <input type="text" class="form-control" name="q" placeholder="Search by title" value="<%= query.q || '' %>">
+  </div>
+  <div class="col-md-2">
+    <select class="form-select" name="category">
+      <option value="">All categories</option>
+      <% categories.forEach(function(c) { %>
+        <option value="<%= c %>" <%= query.category === c ? 'selected' : '' %>><%= c %></option>
+      <% }); %>
+    </select>
+  </div>
+  <div class="col-md-2">
+    <select class="form-select" name="tag">
+      <option value="">All tags</option>
+      <% tags.forEach(function(t) { %>
+        <option value="<%= t %>" <%= query.tag === t ? 'selected' : '' %>><%= t %></option>
+      <% }); %>
+    </select>
+  </div>
+  <div class="col-md-2">
+    <select class="form-select" name="when">
+      <option value="">Upcoming / Past</option>
+      <option value="upcoming" <%= query.when === 'upcoming' ? 'selected' : '' %>>Upcoming</option>
+      <option value="past" <%= query.when === 'past' ? 'selected' : '' %>>Past</option>
+    </select>
+  </div>
+  <div class="col-md-2">
+    <select class="form-select" name="sort">
+      <option value="asc" <%= query.sort !== 'desc' ? 'selected' : '' %>>Date ascending</option>
+      <option value="desc" <%= query.sort === 'desc' ? 'selected' : '' %>>Date descending</option>
+    </select>
+  </div>
+  <div class="col-md-1">
+    <button class="btn btn-outline-secondary w-100" type="submit">Go</button>
+  </div>
+</form>
+
+<div class="table-responsive">
+<table class="table align-middle">
+  <thead>
+    <tr>
+      <th>Title</th><th>Category</th><th>Start date</th><th>Location</th>
+      <th>Capacity</th><th>Confirmed</th><th></th>
+    </tr>
+  </thead>
+  <tbody>
+  <% events.forEach(function(e) { %>
+    <tr>
+      <td><a href="/events/<%= e._id %>"><%= e.title %></a></td>
+      <td><%= e.category %></td>
+      <td><%= new Date(e.startDate).toLocaleDateString() %></td>
+      <td><%= e.location.building %> - <%= e.location.room %></td>
+      <td><%= e.capacity %></td>
+      <td>
+        <%= e.confirmedCount %>
+        <% if (e.confirmedCount >= e.capacity) { %>
+          <span class="badge badge-full text-white">FULL</span>
+        <% } %>
+      </td>
+      <td class="text-end">
+        <a href="/events/<%= e._id %>/edit" class="btn btn-sm btn-outline-secondary">Edit</a>
+        <form action="/events/<%= e._id %>?_method=DELETE" method="POST" class="d-inline" onsubmit="return confirm('Delete this event?');">
+          <button class="btn btn-sm btn-outline-danger">Delete</button>
+        </form>
+      </td>
+    </tr>
+  <% }); %>
+  <% if (events.length === 0) { %>
+    <tr><td colspan="7" class="text-muted text-center">No events match your filters.</td></tr>
+  <% } %>
+  </tbody>
+</table>
+</div>
+
+<%- include('../partials/footer') %>
