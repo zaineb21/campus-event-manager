@@ -1,51 +1,55 @@
 <%- include('partials/header') %>
 
-<h1 class="mb-4">Dashboard</h1>
+<div class="hero-banner">
+  <div class="hero-date"><i class="bi bi-calendar3 me-1"></i>Tableau de bord</div>
+  <h1>Bienvenue sur Campus Event Manager</h1>
+  <p>Voici un apercu en temps reel de l'activite culturelle et evenementielle du campus.</p>
+</div>
 
 <div class="row g-3 mb-4">
   <div class="col-md-3">
-    <div class="card card-stat shadow-sm">
-      <h2><%= usersCount %></h2>
-      <div class="text-muted">Users</div>
+    <div class="stat-card">
+      <div class="stat-icon"><i class="bi bi-people-fill"></i></div>
+      <div><h2><%= usersCount %></h2><p class="stat-label">Utilisateurs</p></div>
     </div>
   </div>
   <div class="col-md-3">
-    <div class="card card-stat shadow-sm">
-      <h2><%= eventsCount %></h2>
-      <div class="text-muted">Events</div>
+    <div class="stat-card">
+      <div class="stat-icon"><i class="bi bi-calendar-event-fill"></i></div>
+      <div><h2><%= eventsCount %></h2><p class="stat-label">Evenements</p></div>
     </div>
   </div>
   <div class="col-md-3">
-    <div class="card card-stat shadow-sm">
-      <h2><%= upcomingCount %></h2>
-      <div class="text-muted">Upcoming Events</div>
+    <div class="stat-card">
+      <div class="stat-icon"><i class="bi bi-hourglass-split"></i></div>
+      <div><h2><%= upcomingCount %></h2><p class="stat-label">A venir</p></div>
     </div>
   </div>
   <div class="col-md-3">
-    <div class="card card-stat shadow-sm">
-      <h2><%= totalRegistrations %></h2>
-      <div class="text-muted">Total Registrations</div>
+    <div class="stat-card">
+      <div class="stat-icon"><i class="bi bi-ticket-perforated-fill"></i></div>
+      <div><h2><%= totalRegistrations %></h2><p class="stat-label">Inscriptions</p></div>
     </div>
   </div>
 </div>
 
 <div class="row g-3">
   <div class="col-md-7">
-    <div class="card shadow-sm">
-      <div class="card-header">Next 5 Upcoming Events</div>
-      <div class="table-responsive">
+    <div class="card h-100">
+      <div class="card-header"><i class="bi bi-clock-history me-2"></i>Prochains evenements</div>
+      <div class="table-responsive" style="border:none; border-radius:0 0 16px 16px;">
         <table class="table mb-0">
-          <thead><tr><th>Title</th><th>Category</th><th>Start date</th></tr></thead>
+          <thead><tr><th>Titre</th><th>Categorie</th><th>Date de debut</th></tr></thead>
           <tbody>
           <% nextEvents.forEach(function(e) { %>
             <tr>
               <td><a href="/events/<%= e._id %>"><%= e.title %></a></td>
-              <td><%= e.category %></td>
-              <td><%= new Date(e.startDate).toLocaleString() %></td>
+              <td><span class="pill"><%= e.category %></span></td>
+              <td class="text-muted"><%= new Date(e.startDate).toLocaleDateString('fr-FR', { day: 'numeric', month: 'short', year: 'numeric' }) %></td>
             </tr>
           <% }); %>
           <% if (nextEvents.length === 0) { %>
-            <tr><td colspan="3" class="text-muted">No upcoming events.</td></tr>
+            <tr><td colspan="3" class="text-muted text-center py-4">Aucun evenement a venir.</td></tr>
           <% } %>
           </tbody>
         </table>
@@ -53,15 +57,18 @@
     </div>
   </div>
   <div class="col-md-5">
-    <div class="card shadow-sm">
-      <div class="card-header">Most Popular Event (confirmed registrations)</div>
+    <div class="card spotlight-card h-100">
       <div class="card-body">
+        <div class="spotlight-badge"><i class="bi bi-star-fill"></i> A la une</div>
         <% if (mostPopular) { %>
-          <h5><a href="/events/<%= mostPopular._id %>"><%= mostPopular.title %></a></h5>
-          <p class="mb-1"><strong>Category:</strong> <%= mostPopular.category %></p>
-          <p class="mb-0"><strong>Confirmed registrations:</strong> <%= mostPopular.confirmedCount %></p>
+          <h3 class="mb-2"><a href="/events/<%= mostPopular._id %>" style="color: var(--ink); text-decoration:none;"><%= mostPopular.title %></a></h3>
+          <span class="pill mb-3 d-inline-block"><%= mostPopular.category %></span>
+          <div class="d-flex align-items-baseline gap-2 mt-3">
+            <span style="font-family:'Playfair Display', serif; font-size:2.4rem; font-weight:700; color: var(--gold-dark);"><%= mostPopular.confirmedCount %></span>
+            <span class="text-muted">inscriptions confirmees</span>
+          </div>
         <% } else { %>
-          <p class="text-muted">No events yet.</p>
+          <p class="text-muted mb-0">Aucun evenement pour le moment.</p>
         <% } %>
       </div>
     </div>

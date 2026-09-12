@@ -1,5 +1,133 @@
-body { background-color: #f7f8fa; }
-.card-stat { text-align: center; padding: 1.2rem; }
-.card-stat h2 { font-size: 2rem; margin-bottom: 0; }
-.badge-full { background-color: #dc3545; }
-.table-responsive { background: white; border-radius: 8px; }
+:root {
+  --ink: #1c2130;
+  --muted: #6b7280;
+  --gold: #b8934a;
+  --gold-dark: #8f6f34;
+  --paper: #faf9f6;
+  --line: #ecebe6;
+}
+
+body {
+  background-color: var(--paper);
+  font-family: 'Inter', -apple-system, sans-serif;
+  color: var(--ink);
+}
+
+h1, h2, h3, .navbar-brand {
+  font-family: 'Playfair Display', Georgia, serif;
+}
+
+.navbar.bg-dark {
+  background-color: #12141d !important;
+  border-bottom: 2px solid var(--gold);
+}
+.navbar-brand { font-weight: 700; font-size: 1.4rem; letter-spacing: 0.3px; }
+.nav-link { font-weight: 500; }
+.nav-link:hover { color: var(--gold) !important; }
+
+/* Hero banner */
+.hero-banner {
+  background: linear-gradient(120deg, #12141d 0%, #262b3d 100%);
+  color: #fff;
+  padding: 2.6rem 2.6rem;
+  border-radius: 18px;
+  margin-bottom: 2rem;
+  position: relative;
+  overflow: hidden;
+  border: 1px solid rgba(184, 147, 74, 0.35);
+}
+.hero-banner::after {
+  content: "";
+  position: absolute;
+  top: -60px; right: -60px;
+  width: 220px; height: 220px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(184,147,74,0.25), transparent 70%);
+}
+.hero-banner h1 { font-size: 2.1rem; margin-bottom: 0.3rem; }
+.hero-banner p { color: rgba(255,255,255,0.65); margin: 0; font-size: 0.98rem; }
+.hero-date { font-size: 0.85rem; color: var(--gold); letter-spacing: 1px; text-transform: uppercase; margin-bottom: 0.6rem; }
+
+/* Stat cards */
+.stat-card {
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  padding: 1.5rem 1.4rem;
+  display: flex;
+  align-items: center;
+  gap: 1.1rem;
+  box-shadow: 0 1px 3px rgba(20,20,30,0.04);
+  transition: transform 0.18s ease, box-shadow 0.18s ease;
+  position: relative;
+}
+.stat-card:hover { transform: translateY(-4px); box-shadow: 0 10px 24px rgba(20,20,30,0.09); }
+.stat-card::before {
+  content: "";
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  border-radius: 16px 16px 0 0;
+  background: var(--gold);
+}
+
+.stat-icon {
+  width: 50px; height: 50px;
+  border-radius: 12px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.3rem; color: var(--gold-dark); flex-shrink: 0;
+  background: linear-gradient(135deg, #f4ecda, #e9dcbd);
+}
+
+.stat-card h2 { font-family: 'Playfair Display', serif; font-size: 2rem; font-weight: 700; margin: 0; color: var(--ink); }
+.stat-card .stat-label { color: var(--muted); font-size: 0.85rem; margin: 0; text-transform: uppercase; letter-spacing: 0.5px; }
+
+/* Cards / tables */
+.card { border: 1px solid var(--line); border-radius: 16px; box-shadow: 0 1px 3px rgba(20,20,30,0.04); }
+.card-header {
+  background: #fff;
+  border-bottom: 1px solid var(--line);
+  font-weight: 600;
+  font-family: 'Playfair Display', serif;
+  font-size: 1.05rem;
+  border-radius: 16px 16px 0 0 !important;
+  padding: 1rem 1.4rem;
+}
+.card-body { padding: 1.4rem; }
+
+.table { margin-bottom: 0; }
+.table thead th {
+  font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.5px;
+  color: var(--muted); border-bottom: 1px solid var(--line); font-weight: 600;
+}
+.table td, .table th { padding: 0.85rem 1.2rem; vertical-align: middle; }
+.table tbody tr:hover { background-color: #faf7ef; }
+.table a { color: var(--ink); font-weight: 600; text-decoration: none; }
+.table a:hover { color: var(--gold-dark); text-decoration: underline; }
+
+.badge-full { background-color: #b3413c; }
+.table-responsive { background: white; border-radius: 16px; overflow: hidden; border: 1px solid var(--line); }
+
+.pill {
+  display: inline-block;
+  padding: 0.2rem 0.65rem;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  background: #f1efe6;
+  color: #6b5b2f;
+  border: 1px solid #e5decb;
+}
+
+.btn-primary { background-color: var(--ink); border-color: var(--ink); }
+.btn-primary:hover { background-color: var(--gold-dark); border-color: var(--gold-dark); }
+
+.spotlight-card {
+  background: linear-gradient(160deg, #fff 0%, #fbf6ea 100%);
+  border: 1px solid #ecdfc0;
+}
+.spotlight-badge {
+  display: inline-flex; align-items: center; gap: 0.4rem;
+  color: var(--gold-dark); font-size: 0.78rem; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 0.6px; margin-bottom: 0.5rem;
+}

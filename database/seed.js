@@ -15,7 +15,7 @@ const dbName = process.env.DB_NAME || 'campus_events';
 function daysFromNow(n) {
   const d = new Date();
   d.setDate(d.getDate() + n);
-  d.setHours(10, 0, 0, 0);
+  d.setHours(9, 30, 0, 0);
   return d;
 }
 
@@ -37,63 +37,75 @@ async function main() {
   await db.collection('users').deleteMany({});
   await db.collection('events').deleteMany({});
 
-  const departments = ['Computer Science', 'Business', 'Design', 'Electrical Engineering', 'Marketing'];
+  const departments = ['Arts Plastiques', 'Histoire de l\'Art', 'Design & Arts Visuels', 'Communication & Medias', 'Architecture'];
   const roles = ['student', 'staff', 'organizer'];
-  const interestsPool = ['AI', 'Cloud Computing', 'Robotics', 'Design', 'Finance', 'Music', 'Sports', 'Data Science', 'Networking', 'Entrepreneurship'];
+  const interestsPool = ['Peinture', 'Photographie', 'Sculpture', 'Cinema', 'Design Graphique', 'Art Numerique', 'Musique', 'Poesie', 'Theatre', 'Architecture d\'Interieur'];
 
-  const firstNames = ['Alice', 'Bilal', 'Chloe', 'David', 'Emeka', 'Fatima', 'Guo', 'Hana', 'Ivan', 'Julia', 'Karim', 'Lea', 'Marco', 'Nadia', 'Omar'];
-  const lastNames = ['Martin', 'Dupont', 'Diallo', 'Nguyen', 'Kone', 'Silva', 'Zhang', 'Haddad', 'Petrov', 'Bernard', 'Moreau', 'Faye', 'Rossi', 'Kader', 'Leroy'];
+  const people = [
+    ['Sirine', 'Belhadj', 'Arts Plastiques', 'student'],
+    ['Anis', 'Chaabane', 'Histoire de l\'Art', 'staff'],
+    ['Nesrine', 'Toumi', 'Design & Arts Visuels', 'organizer'],
+    ['Skander', 'Jelassi', 'Communication & Medias', 'student'],
+    ['Wafa', 'Bouzid', 'Architecture', 'staff'],
+    ['Zied', 'Karray', 'Arts Plastiques', 'student'],
+    ['Amira', 'Sassi', 'Histoire de l\'Art', 'organizer'],
+    ['Bilel', 'Nasri', 'Design & Arts Visuels', 'staff'],
+    ['Nada', 'Ouertani', 'Communication & Medias', 'student'],
+    ['Slim', 'Baccouche', 'Architecture', 'student'],
+    ['Meriem', 'Frikha', 'Arts Plastiques', 'organizer'],
+    ['Hamza', 'Dridi', 'Design & Arts Visuels', 'staff'],
+    ['Emna', 'Bahri', 'Histoire de l\'Art', 'student'],
+    ['Karim', 'Sfaxi', 'Communication & Medias', 'organizer'],
+    ['Lina', 'Chtourou', 'Architecture', 'staff'],
+  ];
 
   const users = [];
-  for (let i = 0; i < 15; i++) {
-    const firstName = firstNames[i];
-    const lastName = lastNames[i];
+  people.forEach(([firstName, lastName, department, role], i) => {
     users.push({
       _id: new ObjectId(),
       firstName,
       lastName,
-      email: `${firstName.toLowerCase()}.${lastName.toLowerCase()}@campus.edu`,
-      department: departments[i % departments.length],
-      role: roles[i % roles.length],
+      email: `${firstName.toLowerCase()}.${lastName.toLowerCase().replace(/[^a-z]/g, '')}@univ-campus.tn`,
+      department,
+      role,
       interests: pickRandom(interestsPool, 2 + (i % 3)),
-      createdAt: daysFromNow(-(120 - i)),
+      createdAt: daysFromNow(-(110 - i)),
     });
-  }
+  });
   await db.collection('users').insertMany(users);
   console.log(`Inserted ${users.length} users.`);
 
-  const categories = ['Workshop', 'Talk', 'Meetup', 'Hackathon', 'Career Fair', 'Culture'];
-  const tagsPool = ['ai', 'cloud', 'career', 'networking', 'music', 'sports', 'design', 'startup', 'sustainability', 'robotics'];
-  const buildings = ['Innovation Center', 'Main Auditorium', 'Library Hall', 'Science Building', 'Sports Complex'];
-  const rooms = ['A101', 'B204', 'C310', 'Amphitheatre 1', 'Gymnasium'];
-  const campuses = ['Paris', 'Lyon', 'Lille'];
+  const categories = ['Exposition', 'Atelier', 'Conference', 'Projection', 'Rencontre', 'Vernissage'];
+  const tagsPool = ['art', 'exposition', 'peinture', 'photographie', 'cinema', 'design', 'sculpture', 'musique', 'theatre', 'culture'];
+  const buildings = ['Hall d\'Exposition', 'Batiment des Arts', 'Amphi Central', 'Galerie du Campus', 'Espace Culturel'];
+  const rooms = ['Salle 1', 'Atelier B', 'Amphi A', 'Galerie Nord', 'Salle Polyvalente'];
+  const campuses = ['Tunis', 'Sousse', 'Sfax'];
 
   const eventTitles = [
-    'Intro to Machine Learning', 'Cloud Architecture Bootcamp', 'Startup Pitch Night',
-    'Campus Hackathon 2026', 'Design Thinking Workshop', 'Career Fair - Tech Sector',
-    'Robotics Demo Day', 'Data Science Career Talk', 'Networking Mixer for Alumni',
-    'Sustainability in Tech Panel', 'Music & Arts Festival', 'Football Tournament Kickoff',
-    'DevOps Fundamentals', 'Women in Engineering Meetup', 'Blockchain Explained',
-    'Public Speaking Workshop', 'Cybersecurity Awareness Talk', 'End of Semester Gala',
+    'Vernissage : Regards Croises', 'Atelier Peinture a l\'Huile', 'Conference Histoire de l\'Art Moderne',
+    'Projection Courts-Metrages Etudiants', 'Rencontre avec un Photographe', 'Exposition Sculptures Etudiantes',
+    'Galerie Ephemere du Campus', 'Atelier Design Graphique', 'Soiree Poesie et Musique',
+    'Conference Architecture Durable', 'Festival du Court-Metrage', 'Atelier Photographie Argentique',
+    'Rencontre des Jeunes Createurs', 'Vernissage Art Numerique', 'Exposition Photo : Portraits du Campus',
+    'Atelier Theatre d\'Improvisation', 'Conference Design et Societe', 'Gala de Cloture de l\'Annee Artistique',
   ];
 
   const events = [];
-  // spread events across time: some past, some future
-  const offsets = [-45, -30, -20, -10, -5, -2, 3, 5, 8, 12, 15, 20, 25, 30, 40, 55, 70, 90];
+  const offsets = [-50, -35, -22, -12, -6, -3, 4, 6, 9, 13, 17, 22, 27, 33, 42, 58, 73, 95];
 
   for (let i = 0; i < eventTitles.length; i++) {
     const start = daysFromNow(offsets[i]);
-    const end = new Date(start.getTime() + (2 + (i % 3)) * 60 * 60 * 1000);
-    const organizer = users[(i * 3) % users.length];
+    const end = new Date(start.getTime() + (1 + (i % 3)) * 90 * 60 * 1000);
+    const organizer = users[(i * 4 + 2) % users.length];
     events.push({
       _id: new ObjectId(),
       title: eventTitles[i],
-      description: `${eventTitles[i]} is an event organized for students and staff to learn, network and collaborate.`,
+      description: `${eventTitles[i]} : un evenement organise pour les etudiants et le personnel afin de decouvrir, partager et s'exprimer autour de l'art et de la creation.`,
       category: categories[i % categories.length],
       tags: pickRandom(tagsPool, 2 + (i % 3)),
       startDate: start,
       endDate: end,
-      capacity: 10 + (i % 5) * 5,
+      capacity: 8 + (i % 6) * 4,
       location: {
         building: buildings[i % buildings.length],
         room: rooms[i % rooms.length],
@@ -101,42 +113,40 @@ async function main() {
       },
       organizerId: organizer._id,
       registrations: [],
-      createdAt: daysFromNow(-(100 - i)),
+      createdAt: daysFromNow(-(95 - i)),
     });
   }
 
-  // Distribute at least 40 registrations. Leave a few events (indices 8, 13, 16) with none.
-  const emptyIndexes = new Set([8, 13, 16]);
+  const emptyIndexes = new Set([5, 11, 15]);
   let totalRegs = 0;
   for (let i = 0; i < events.length; i++) {
     if (emptyIndexes.has(i)) continue;
     const capacity = events[i].capacity;
-    const howMany = Math.min(users.length, 2 + (i % 6)); // varies per event
+    const howMany = Math.min(users.length, 2 + ((i + 1) % 6));
     const chosenUsers = pickRandom(users, howMany);
     let confirmedCount = 0;
     chosenUsers.forEach((u, idx) => {
       let status = 'confirmed';
-      if (idx % 6 === 5) status = 'waiting';
-      else if (idx % 7 === 6) status = 'cancelled';
+      if (idx % 5 === 4) status = 'waiting';
+      else if (idx % 8 === 7) status = 'cancelled';
       if (status === 'confirmed') {
         if (confirmedCount >= capacity) {
-          status = 'waiting'; // respect capacity in seed data
+          status = 'waiting';
         } else {
           confirmedCount++;
         }
       }
       events[i].registrations.push({
         userId: u._id,
-        registeredAt: daysFromNow(offsets[i] - 5 - idx),
+        registeredAt: daysFromNow(offsets[i] - 4 - idx),
         status,
       });
       totalRegs++;
     });
   }
 
-  // Ensure we reach at least 40 registrations; top up on a few large events if needed
   let idx = 0;
-  while (totalRegs < 40) {
+  while (totalRegs < 42) {
     const e = events[idx % events.length];
     if (!emptyIndexes.has(idx % events.length)) {
       const candidate = users[Math.floor(Math.random() * users.length)];
